@@ -1,0 +1,18 @@
+.action-button {
+	width: 120px;
+}
+
+.container .card-body .full-post-content {
+	margin: -40px;
+	white-space: pre-wrap;
+}
+
+.container .card-body .full-post-content h2 {
+	max-width: 100%;
+}
+
+.container .card-body .full-post-content p {
+	max-width: 850px;
+	text-align: justify;
+	margin: 0 auto;
+}
