@@ -23,7 +23,8 @@
 			$_SESSION['errorMessage'] = "Category Name should be greater than 3 characters";
 			reDirect('categories.php');
 		}
-		elseif (strlen($category)>29) {
+        // ---------------------------------------------------------------------------- varchar 24 global
+		elseif (strlen($category)>24) {
 			$_SESSION['errorMessage'] = "Category Name should be less than 30 characters";
 			reDirect('categories.php');
 		}
