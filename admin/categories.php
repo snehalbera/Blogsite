@@ -1,13 +1,13 @@
 <?php 
-	require 'config/config.php';
-	require 'includes/functions.php';
-	require 'includes/sessions.php';
+	require '../config/config.php';
+	require '../includes/functions.php';
+	require '../includes/sessions.php';
  ?>
 
 <?php
     // ----------------------------------------------------------------------
 	// $publisher = $_SESSION['name'];
-    $publisher = snehalbera;
+    $publisher = "snehalbera";
 
 	if (isset($_POST['csubmit'])) {
 		$category = $_POST['cname'];
