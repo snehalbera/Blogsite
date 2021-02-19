@@ -1,3 +1,46 @@
+<?php 
+	require 'config/config.php';
+	require 'includes/functions.php';
+	require 'includes/sessions.php';
+ ?>
+
+<?php
+    // ----------------------------------------------------------------------
+	// $publisher = $_SESSION['name'];
+    $publisher = snehalbera;
+
+	if (isset($_POST['csubmit'])) {
+		$category = $_POST['cname'];
+		
+		// DATE
+		$datetime = currentTime();
+
+		if (empty($category)) {
+			$_SESSION['errorMessage'] = "Enter a Category Name";
+			reDirect('categories.php');
+		}
+		elseif (strlen($category)<3) {
+			$_SESSION['errorMessage'] = "Category Name should be greater than 3 characters";
+			reDirect('categories.php');
+		}
+		elseif (strlen($category)>29) {
+			$_SESSION['errorMessage'] = "Category Name should be less than 30 characters";
+			reDirect('categories.php');
+		}
+		else {
+            // ------------------------------------------------------------
+			$publish = mysqli_query($con, "INSERT INTO categories VALUES ('', '$category', '$publisher', '$datetime')");
+			if ($publish) {
+				$_SESSION['successMessage'] = "Category added successfully";
+			}
+			else {
+				$_SESSION['errorMessage'] = "Something went wrong. Try Again!";
+				reDirect('categories.php');
+			}
+		}
+	}
+ ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -70,6 +113,11 @@
 	<div class="container">
 
 		<div class="mt-4 mx-4">
+            <?php 
+				echo errorMessage();
+				echo successMessage();
+			 ?>
+            
 			<div class="card">
 		  		<div class="card-header h4 text-primary">Add New Category</div>
 		  		<div class="card-body mx-sm-5">
@@ -93,17 +141,6 @@
 		</div>
 	</div>
 	<!-- MAIN AREA END -->
-    
-
-
-
-
-
-
-
-
-
-
 
     <!-- FOOTER -->
 	<footer class="page-footer fixed-bottom bg-light">
