@@ -61,17 +61,15 @@
     <!-- HEADER -->
 	<header>
 		<div class="container" style="margin-top: 70px;">
-			<h3>Categories</h3>
+			<div class="pt-3 pb-1"><h2>Categories</h2></div>
 		</div>
 	</header>
 	<!-- HEADER END -->
 
     <!-- MAIN AREA -->
 	<div class="container">
-		<!-- <div class="pt-3 pb-1"><h2>Categories</h2></div> -->
 
 		<div class="mt-4 mx-4">
-			
 			<div class="card">
 		  		<div class="card-header h4 text-primary">Add New Category</div>
 		  		<div class="card-body mx-sm-5">
