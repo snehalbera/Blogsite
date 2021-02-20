@@ -5,7 +5,7 @@
  ?>
 
 <?php
-    // ----------------------------------------------------------------------
+    // ---------------------------------------------------------------------- mysql_real_escape_string(
 	// $publisher = $_SESSION['name'];
     $publisher = "snehalbera";
 
@@ -28,17 +28,22 @@
 			$_SESSION['errorMessage'] = "Post Title should be greater than 5 characters";
 			reDirect('posts.php');
 		}
-		elseif (strlen($content)>999) {
-			$_SESSION['errorMessage'] = "Post Description should be less than 999 characters";
-			reDirect('posts.php');
-		}
+		// elseif (strlen($content)>999) {
+		// 	$_SESSION['errorMessage'] = "Post Description should be less than 999 characters";
+		// 	reDirect('posts.php');
+		// }
 		else {
-            // ----------------------------------------------------------------------------------------------------------
+            // ESCAPED STRINGS
+            $title = mysqli_real_escape_string($con, $title);
+            $subtitle = mysqli_real_escape_string($con, $subtitle);
+            $content = mysqli_real_escape_string($con, $content);
+
+            // ---------------------------------------------------------------
 			$post = mysqli_query($con, "INSERT INTO posts VALUES ('', '$datetime', '$title', '$subtitle', '$category', '$publisher', '$image', '$content')");
-			move_uploaded_file($_FILES['pimage']['tmp_name'], $upload);
-			
+
 			if ($post) {
 				$_SESSION['successMessage'] = "Post added successfully";
+                move_uploaded_file($_FILES['pimage']['tmp_name'], $upload);
 			}
 			else {
 				$_SESSION['errorMessage'] = "Something went wrong. Try Again!";
@@ -119,14 +124,14 @@
     <!-- MAIN AREA -->
 	<div class="container">
 
-		<div class="mt-4 mx-4">
+		<div class="mt-4 mx-sm-5">
             <?php 
 				echo errorMessage();
 				echo successMessage();
 			 ?>
             
 			<div class="card">
-		  		<div class="card-header h4 text-primary">Add New Posts</div>
+		  		<div class="card-header h4 text-primary">Add New Post</div>
 		  		<div class="card-body mx-sm-5">
 		    		
 		    		<form action="posts.php" method="POST" enctype="multipart/form-data">
