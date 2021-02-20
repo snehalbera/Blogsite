@@ -127,6 +127,7 @@
 				  		<h5 class="card-title h5">Category Name</h5>
 				    	<input type="text" class="form-control" name="cname" id="ctitle" placeholder="Title Name">
 
+						<!-- BUTTONS -->
 					    <div class="row mt-4">
 					    	<div class="col pr-2">
 					    		<a href="dashboard.php"><button type="submit" class="btn float-right btn-primary action-button" style="min-width: 104px">Dashboard</button></a>
