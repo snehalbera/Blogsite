@@ -9,34 +9,40 @@
 	// $publisher = $_SESSION['name'];
     $publisher = "snehalbera";
 
-	if (isset($_POST['csubmit'])) {
-		$category = $_POST['cname'];
-		
+	if (isset($_POST['psubmit'])) {
+		$title = $_POST['ptitle'];
+		$subtitle = $_POST['psubtitle'];
+		$image = $_FILES['pimage']['name'];
+		$category = $_POST['scategory'];
+		$upload = "../uploads/".basename($_FILES['pimage']['name']);
+		$content = $_POST['pdescription'];
+
 		// DATE
 		$datetime = currentTime();
 
-		if (empty($category)) {
-			$_SESSION['errorMessage'] = "Enter a Category Name";
-			reDirect('categories.php');
+		if (empty($title)) {
+			$_SESSION['errorMessage'] = "Enter a Post Title";
+			reDirect('posts.php');
 		}
-		elseif (strlen($category)<3) {
-			$_SESSION['errorMessage'] = "Category Name should be greater than 3 characters";
-			reDirect('categories.php');
+		elseif (strlen($title)<5) {
+			$_SESSION['errorMessage'] = "Post Title should be greater than 5 characters";
+			reDirect('posts.php');
 		}
-        // ---------------------------------------------------------------------------- varchar 24 global
-		elseif (strlen($category)>24) {
-			$_SESSION['errorMessage'] = "Category Name should be less than 30 characters";
-			reDirect('categories.php');
+		elseif (strlen($content)>999) {
+			$_SESSION['errorMessage'] = "Post Description should be less than 999 characters";
+			reDirect('posts.php');
 		}
 		else {
-            // ------------------------------------------------------------
-			$publish = mysqli_query($con, "INSERT INTO categories VALUES ('', '$category', '$publisher', '$datetime')");
-			if ($publish) {
-				$_SESSION['successMessage'] = "Category added successfully";
+            // ----------------------------------------------------------------------------------------------------------
+			$post = mysqli_query($con, "INSERT INTO posts VALUES ('', '$datetime', '$title', '$subtitle', '$category', '$publisher', '$image', '$content')");
+			move_uploaded_file($_FILES['pimage']['tmp_name'], $upload);
+			
+			if ($post) {
+				$_SESSION['successMessage'] = "Post added successfully";
 			}
 			else {
 				$_SESSION['errorMessage'] = "Something went wrong. Try Again!";
-				reDirect('categories.php');
+				reDirect('posts.php');
 			}
 		}
 	}
@@ -105,7 +111,7 @@
     <!-- HEADER -->
 	<header>
 		<div class="container" style="margin-top: 70px;">
-			<div class="pt-3 pb-1"><h2>Categories</h2></div>
+			<div class="pt-3 pb-1"><h2>Posts</h2></div>
 		</div>
 	</header>
 	<!-- HEADER END -->
@@ -120,19 +126,56 @@
 			 ?>
             
 			<div class="card">
-		  		<div class="card-header h4 text-primary">Add New Category</div>
+		  		<div class="card-header h4 text-primary">Add New Posts</div>
 		  		<div class="card-body mx-sm-5">
 		    		
-		    		<form action="categories.php" method="POST">
-				  		<h5 class="card-title h5">Category Name</h5>
-				    	<input type="text" class="form-control" name="cname" id="ctitle" placeholder="Title Name">
+		    		<form action="posts.php" method="POST" enctype="multipart/form-data">
+					  	<h5 class="card-title h5">Post Name</h5>
+					    <input type="text" class="form-control" name="ptitle" placeholder="Post Title">
+					    <h5 class="card-title h5 mt-4">Sub Heading</h5>
+					    <input type="text" class="form-control" name="psubtitle" placeholder="Sub Title">
+				    
+					    <div class="row">
+					      	<div class="col-lg-8">
+						      	<h5 class="card-title h5 mt-4">Post Image</h5>
+						      	<div class="input-group">
+								  	<div class="custom-file">
+									    <input type="file" class="custom-file-input" name="pimage" id="postimage">
+									    <label class="custom-file-label" for="postimage">Choose Cover Image</label>
+								  	</div>
+								</div>
+					      	</div>
 
+					      	<div class="col-lg-4">
+							    <h5 class="card-title h5 mt-4">Category</h5>
+							    <select class="custom-select w-100" name="scategory">
+							        <option selected>Select Category</option>
+							    	
+							    	<?php 
+                                        // ---------------------------------------------------------------------------------
+								    	$categories_name = mysqli_query($con, "SELECT name FROM categories");
+								    	$i = 0;
+								    	while($row = mysqli_fetch_assoc($categories_name)){
+								    		echo '<option>'. $row['name'] .'</option>';
+								    		$i++ ;
+								    	}
+								     
+							         ?>
+							        
+						      	</select>
+					      	</div>
+				      	</div>
+
+				      	<h5 class="card-title h5 mt-4">Post Description</h5>
+					    <textarea class="form-control" name="pdescription" rows="3" cols="20"></textarea>
+
+					    <!-- BUTTONS -->
 					    <div class="row mt-4">
 					    	<div class="col pr-2">
-					    		<a href="dashboard.php"><button type="submit" class="btn float-right btn-primary action-button" style="min-width: 104px">Dashboard</button></a>
+					    		<button type="submit" class="btn float-right btn-primary action-button" style="min-width: 104px">Dashboard</button>
 					    	</div>
 					    	<div class="col pl-2">
-					    		<button type="submit" class="btn float-left btn-warning action-button" name="csubmit" style="min-width: 104px">Publish</button>
+					    		<button type="submit" class="btn float-left btn-warning action-button" name="psubmit" style="min-width: 104px">Post</button>
 					    	</div>
 					    </div>
 					</form>
@@ -144,7 +187,7 @@
 	<!-- MAIN AREA END -->
 
     <!-- FOOTER -->
-	<footer class="page-footer fixed-bottom bg-light">
+	<footer class="page-footer bg-light mt-4">
         <div class="footer-copyright text-center py-3">© 2020 Copyright:
           <a href="#"> Blogsite.com</a>
         </div>
