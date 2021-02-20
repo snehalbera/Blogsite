@@ -159,7 +159,6 @@
 								    		echo '<option>'. $row['name'] .'</option>';
 								    		$i++ ;
 								    	}
-								     
 							         ?>
 							        
 						      	</select>
