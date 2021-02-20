@@ -113,7 +113,7 @@
     <!-- MAIN AREA -->
 	<div class="container">
 
-		<div class="mt-4 mx-4">
+		<div class="mt-4 mx-sm-5">
             <?php 
 				echo errorMessage();
 				echo successMessage();
