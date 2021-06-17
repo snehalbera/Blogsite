@@ -28,10 +28,6 @@
 			$_SESSION['errorMessage'] = "Post Title should be greater than 5 characters";
 			reDirect('posts.php');
 		}
-		// elseif (strlen($content)>999) {
-		// 	$_SESSION['errorMessage'] = "Post Description should be less than 999 characters";
-		// 	reDirect('posts.php');
-		// }
 		else {
             // ESCAPED STRINGS
             $title = mysqli_real_escape_string($con, $title);
@@ -39,7 +35,7 @@
             $content = mysqli_real_escape_string($con, $content);
 
             // ---------------------------------------------------------------
-			$post = mysqli_query($con, "INSERT INTO posts VALUES ('', '$datetime', '$title', '$subtitle', '$category', '$publisher', '$image', '$content')");
+			$post = mysqli_query($con, "INSERT INTO post VALUES ('', '$datetime', '$title', '$subtitle', '$category', '$publisher', '$image', '$content')");
 
 			if ($post) {
 				$_SESSION['successMessage'] = "Post added successfully";
@@ -158,7 +154,7 @@
 							    	
 							    	<?php 
                                         // ---------------------------------------------------------------------------------
-								    	$categories_name = mysqli_query($con, "SELECT name FROM categories");
+								    	$categories_name = mysqli_query($con, "SELECT name FROM category");
 								    	$i = 0;
 								    	while($row = mysqli_fetch_assoc($categories_name)){
 								    		echo '<option>'. $row['name'] .'</option>';

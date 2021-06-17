@@ -30,7 +30,7 @@
 		}
 		else {
             // ------------------------------------------------------------
-			$publish = mysqli_query($con, "INSERT INTO categories VALUES ('', '$category', '$publisher', '$datetime')");
+			$publish = mysqli_query($con, "INSERT INTO category VALUES ('', '$category', '$publisher', '$datetime')");
 			if ($publish) {
 				$_SESSION['successMessage'] = "Category added successfully";
 			}
