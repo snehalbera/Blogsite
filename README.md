@@ -1,2 +1,4 @@
-# blogsite
- Content Management System for blogs
+# Blogsite
+ Content Management System for blogs<br>
+ 
+Still under development...
