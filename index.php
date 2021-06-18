@@ -284,12 +284,14 @@
 							?>
 						</div>
 					</div>
+
 				</div>
 			</div>
             <!-- SIDE COLUMN END -->
 
         </div>
-        <!-- MAIN AREA END -->
+	</div>
+    <!-- MAIN AREA END -->
 
 	<!-- FOOTER -->
 	<footer class="page-footer font-small mdb-color pt-4 mt-4 border-top border-primary">
