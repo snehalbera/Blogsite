@@ -1,7 +1,7 @@
 <?php 
-	require 'config/config.php';
-	require 'includes/functions.php';
-	require 'includes/sessions.php';
+	require '../config/config.php';
+	require '../includes/functions.php';
+	require '../includes/sessions.php';
  ?>
 
 <!DOCTYPE html>
@@ -18,10 +18,10 @@
 	<script type="text/javascript" src="assets/js/bootstrap.js"></script>
 
 
-	<!-- CSS -->
-	<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
-	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+<!-- CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="undefined" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css"> -->
 
 </head>
 <body>
@@ -91,19 +91,19 @@
 
 				elseif (isset($_GET['category'])) {
 					$category = $_GET['category'];
-					$count = mysqli_num_rows(mysqli_query($con, "SELECT * FROM post WHERE category='$category' ORDER BY id DESC"));
+					$count = mysqli_num_rows(mysqli_query($con, "SELECT * FROM posts WHERE category='$category' ORDER BY id DESC"));
 					if ($count==0) {
 						$_SESSION['errorMessage'] = "Sorry, there isn't any blogpost regarding that category";
 						reDirect('public.php');
 					}
 					else {
-						$query = mysqli_query($con, "SELECT * FROM post WHERE category='$category' ORDER BY id DESC");
+						$query = mysqli_query($con, "SELECT * FROM posts WHERE category='$category' ORDER BY id DESC");
 					}
 				}
 
 				//DEFAULT QUERY
 		      	else {
-					$query = mysqli_query($con, "SELECT * FROM post ORDER BY id DESC LIMIT 0,6");
+					$query = mysqli_query($con, "SELECT * FROM posts ORDER BY id DESC LIMIT 0,6");
 					$page = 1;
 				}
 					//$i = 0;

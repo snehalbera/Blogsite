@@ -55,15 +55,23 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Content Management Panel</title>
 
     <!-- CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <!-- <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css"> -->
 
-    <title>Content Management Panel</title>
 </head>
 
-<style></style>
+<style>
+	.mg-top {
+		margin-top: 70px;
+	}
+
+	.btn-min-wt {
+		min-width: 104px;
+	}
+</style>
 
 <body>
     <!-- NAVBAR -->
@@ -111,7 +119,7 @@
 
     <!-- HEADER -->
 	<header>
-		<div class="container" style="margin-top: 70px;">
+		<div class="container mg-top">
 			<div class="pt-3 pb-1"><h2>Posts</h2></div>
 		</div>
 	</header>
@@ -172,10 +180,10 @@
 					    <!-- BUTTONS -->
 					    <div class="row mt-4">
 					    	<div class="col pr-2">
-					    		<button type="submit" class="btn float-right btn-primary action-button" style="min-width: 104px">Dashboard</button>
+					    		<button type="submit" class="btn float-right btn-primary action-button btn-min-wt">Dashboard</button>
 					    	</div>
 					    	<div class="col pl-2">
-					    		<button type="submit" class="btn float-left btn-warning action-button" name="psubmit" style="min-width: 104px">Post</button>
+					    		<button type="submit" class="btn float-left btn-warning action-button btn-min-wt" name="psubmit">Post</button>
 					    	</div>
 					    </div>
 					</form>
