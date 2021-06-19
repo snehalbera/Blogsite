@@ -5,16 +5,16 @@
  ?>
 
 <?php
-    // ---------------------------------------------------------------------- mysql_real_escape_string(
 	// $publisher = $_SESSION['name'];
     $publisher = "snehalbera";
+    $id = $_GET['id'];
 
-	if (isset($_POST['psubmit'])) {
+	if (isset($_POST['pupdate'])) {
 		$title = $_POST['ptitle'];
 		$subtitle = $_POST['psubtitle'];
 		$image = $_FILES['pimage']['name'];
 		$category = $_POST['scategory'];
-		$upload = "../uploads/".basename($_FILES['pimage']['name']);
+		$upload = "uploads/".basename($_FILES['pimage']['name']);
 		$content = $_POST['pdescription'];
 
 		// DATE
@@ -22,29 +22,32 @@
 
 		if (empty($title)) {
 			$_SESSION['errorMessage'] = "Enter a Post Title";
-			reDirect('posts.php');
+			reDirect('editpost.php?id=$id');
 		}
 		elseif (strlen($title)<5) {
 			$_SESSION['errorMessage'] = "Post Title should be greater than 5 characters";
-			reDirect('posts.php');
+			reDirect('editpost.php?id=$id');
+		}
+		elseif (strlen($content)>9999) {
+			$_SESSION['errorMessage'] = "Post Description should be less than 999 characters";
+			reDirect('editpost.php?id=$id');
 		}
 		else {
-            // ESCAPED STRINGS
-            $title = mysqli_real_escape_string($con, $title);
-            $subtitle = mysqli_real_escape_string($con, $subtitle);
-            $content = mysqli_real_escape_string($con, $content);
-
-            // ---------------------------------------------------------------
-			$post = mysqli_query($con, "INSERT INTO post VALUES ('', '$datetime', '$title', '$subtitle', '$category', '$publisher', '$image', '$content')");
-
-			if ($post) {
-				$_SESSION['successMessage'] = "Post added successfully";
-                move_uploaded_file($_FILES['pimage']['tmp_name'], $upload);
+			if (!isset($_FILES['pimage']['name'])) {
+				$query = mysqli_query($con, "UPDATE post SET title='$title', subtitle='$subtitle', category='$category', image='$image', content='$content' WHERE id='$id'");
+				move_uploaded_file($_FILES['pimage']['tmp_name'], $upload);
 			}
 			else {
-				$_SESSION['errorMessage'] = "Something went wrong. Try Again!";
-				reDirect('posts.php');
-			}
+				$query = mysqli_query($con, "UPDATE post SET title='$title', subtitle='$subtitle', category='$category', content='$content' WHERE id='$id'");
+				
+				if ($query) {
+					$_SESSION['successMessage'] = "Post updated successfully";
+				}
+				else {
+					$_SESSION['errorMessage'] = "Something went wrong. Try Again!";
+					reDirect('editpost.php?id=$id');
+				}
+			}	
 		}
 	}
  ?>
@@ -74,7 +77,7 @@
 </style>
 
 <body>
-    <!-- NAVBAR -->
+	<!-- NAVBAR -->
 	<nav class="navbar navbar-expand-lg fixed-top bg-light">
 		<div class="container">
 			<a class="navbar-brand" href="#">Admin Panel</a>
@@ -118,32 +121,45 @@
 	<!-- NAVBAR END -->
 
     <!-- HEADER -->
-	<header>
-		<div class="container mg-top">
-			<div class="pt-3 pb-1"><h2>Posts</h2></div>
-		</div>
+    <header>
+    <div class="container mg-top">
+        <div class="pt-3 pb-1"><h2>Edit</h2></div>
+    </div>
 	</header>
 	<!-- HEADER END -->
-
+    
     <!-- MAIN AREA -->
 	<div class="container">
 
 		<div class="mt-4 mx-sm-5">
-            <?php 
+			<?php 
 				echo errorMessage();
 				echo successMessage();
+			?>
+
+			<?php
+				$query = mysqli_query($con, "SELECT * FROM posts WHERE id='$id'"); //----------
+				$row = mysqli_fetch_array($query);
+
+				$ftitle = $row['title'];
+				$fsubtitle = $row['subtitle'];
+				$fcategory = $row['category'];
+				$fimage = $row['image'];
+				$fcontent = $row['content'];
 			 ?>
-            
+
 			<div class="card">
-		  		<div class="card-header h4 text-primary">Add New Post</div>
+		  		<div class="card-header h4 text-primary">Edit Post</div>
 		  		<div class="card-body mx-sm-5">
 		    		
-		    		<form action="posts.php" method="POST" enctype="multipart/form-data">
+		    		<form action="edit.php?id=<?php echo $id; ?>" method="POST" enctype="multipart/form-data">
 					  	<h5 class="card-title h5">Post Name</h5>
-					    <input type="text" class="form-control" name="ptitle" placeholder="Post Title">
+					    <input type="text" class="form-control" name="ptitle" placeholder="Post Title" value="<?php echo $ftitle; ?>">
 					    <h5 class="card-title h5 mt-4">Sub Heading</h5>
-					    <input type="text" class="form-control" name="psubtitle" placeholder="Sub Title">
+					    <input type="text" class="form-control" name="psubtitle" placeholder="Sub Title" value="<?php echo $fsubtitle; ?>">
 				    
+				    	<h5 class="card-title h5 mt-4">Cover Image</h5>
+				    	<img class="rounded" src="../uploads/<?php echo $fimage; ?>" max-height="500px" width="100%">
 					    <div class="row">
 					      	<div class="col-lg-8">
 						      	<h5 class="card-title h5 mt-4">Post Image</h5>
@@ -158,16 +174,16 @@
 					      	<div class="col-lg-4">
 							    <h5 class="card-title h5 mt-4">Category</h5>
 							    <select class="custom-select w-100" name="scategory">
-							        <option selected>Select Category</option>
+							        <option selected><?php echo $fcategory; ?></option>
 							    	
 							    	<?php 
-                                        // ---------------------------------------------------------------------------------
-								    	$categories_name = mysqli_query($con, "SELECT name FROM category");
+								    	$query = mysqli_query($con, "SELECT name FROM category");
 								    	$i = 0;
-								    	while($row = mysqli_fetch_assoc($categories_name)){
+								    	while($row = mysqli_fetch_assoc($query)){
 								    		echo '<option>'. $row['name'] .'</option>';
 								    		$i++ ;
 								    	}
+								     
 							         ?>
 							        
 						      	</select>
@@ -175,7 +191,9 @@
 				      	</div>
 
 				      	<h5 class="card-title h5 mt-4">Post Description</h5>
-					    <textarea class="form-control" name="pdescription" rows="3" cols="20"></textarea>
+					    <textarea class="form-control" name="pdescription" rows="3" cols="20">
+					    	 <?php echo $fcontent; ?>
+					    </textarea>
 
 					    <!-- BUTTONS -->
 					    <div class="row mt-4">
@@ -183,7 +201,7 @@
 					    		<button type="submit" class="btn float-right btn-primary action-button btn-min-wt">Dashboard</button>
 					    	</div>
 					    	<div class="col pl-2">
-					    		<button type="submit" class="btn float-left btn-warning action-button btn-min-wt" name="psubmit">Post</button>
+					    		<button type="submit" class="btn float-left btn-success action-button btn-min-wt" name="pupdate">Update</button>
 					    	</div>
 					    </div>
 					</form>

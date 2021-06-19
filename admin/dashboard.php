@@ -161,8 +161,8 @@
 								?>
 						</td>
 					 	<td class="text-center"> <!-- style="display: grid; te-columns: 1fr 1fr; grid-gap: 10px; border: 1px solid black;" -->
-					 		<a href="edit.php?id=<?php echo $row['id'] ?>" class="text-decoration-none"> <span class="btn-sm btn-warning">Edit</span> </a>
-					 		<a href="delete.php?id=<?php echo $row['id'] ?>" class="text-decoration-none"> <span class="btn-sm btn-danger">Delete</span> </a>
+					 		<a href="editpost.php?id=<?php echo $row['id'] ?>" class="text-decoration-none"> <span class="btn-sm btn-warning">Edit</span> </a>
+					 		<a href="deletepost.php?id=<?php echo $row['id'] ?>" class="text-decoration-none"> <span class="btn-sm btn-danger">Delete</span> </a>
 					 	</td>
 					 	<td class="text-center"> <a href="fullpost.php?id=<?php echo $row['id'] ?>" target="_blank" > <span class="btn-sm btn-primary">Preview</span> </a> </td>
 					 </tr>

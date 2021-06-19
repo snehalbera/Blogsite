@@ -100,9 +100,9 @@
 
 	<!-- MAIN AREA -->
 	<div class="container">
-		<div class="row">
+		<!-- <div class="row"> -->
             <!-- MAIN COLUMN -->
-			<div class="col-sm-8 mt-1">
+			<!-- <div class="col-sm-8 mt-1"> -->
 				<?php
 					//SEARCH FIELD
 					if (isset($_GET['searchbutton'])) {
@@ -145,8 +145,8 @@
 								$query = mysqli_query($con, "SELECT * FROM comment WHERE post_id='$postid' AND status='ON'");
 								$count = mysqli_num_rows($query);
 								if ($count>0) {
-										$i = 0;
-										while($row = mysqli_fetch_assoc($query)){
+									$i = 0;
+									while($row = mysqli_fetch_assoc($query)){
 											
 							?>
 									
@@ -169,11 +169,11 @@
 							else {
 								echo '<h5 class="lead text-warning mt-2 mx-3 pl-1">Be the first to comment on this post</span>';
 							}
-							?>
+							 ?>
 						</div>
 
 						<hr>
-						<div class="card-body mx-2">
+						<div class="card-body mx-4">
 							<?php 
 								echo errorMessage();
 								echo successMessage();
@@ -210,10 +210,10 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			<!-- </div> -->
 			<!-- MAIN COLUMN END -->
 
-		</div>
+		<!-- </div> -->
 	</div>
 	<!-- MAIN AREA END -->
 
