@@ -1,18 +1,18 @@
-.action-button {
-	width: 120px;
+.tag {
+	position: absolute;
+	top:20px;
+	left:15px;
 }
 
-.container .card-body .full-post-content {
-	margin: -40px;
-	white-space: pre-wrap;
+.mg-top {
+	margin-top: 70px;
 }
 
-.container .card-body .full-post-content h2 {
+.d-icon {
 	max-width: 100%;
+	max-height: 20px;
 }
 
-.container .card-body .full-post-content p {
-	max-width: 850px;
-	text-align: justify;
-	margin: 0 auto;
+.btn-min-wt {
+	min-width: 104px;
 }
