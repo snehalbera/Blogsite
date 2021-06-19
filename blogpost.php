@@ -18,19 +18,19 @@
 		// VALIDATION
 		if (empty($name)) {
 			$_SESSION['errorMessage'] = "Enter your Name";
-			reDirect('fullpost.php?id='.$postid);
+			reDirect('blogpost.php?id='.$postid);
 		}
 		elseif (empty($email)) {
 			$_SESSION['errorMessage'] = "Enter your Email";
-			reDirect('fullpost.php?id='.$postid);
+			reDirect('blogpost.php?id='.$postid);
 		}
 		elseif (empty($comment)) {
 			$_SESSION['errorMessage'] = "Share your thoughts on the post";
-			reDirect('fullpost.php?id='.$postid);
+			reDirect('blogpost.php?id='.$postid);
 		}
 		elseif (strlen($comment)>299) {
 			$_SESSION['errorMessage'] = "Comment should be less than 300 characters";
-			reDirect('fullpost.php?id='.$postid);
+			reDirect('blogpost.php?id='.$postid);
 		}
 		else {
 			$pcomment = mysqli_query($con, "INSERT INTO comment VALUES ('', '$datetime', '$name', '$email', '$comment', 'Pending', 'OFF', '$postid')");
@@ -39,7 +39,7 @@
 			}
 			else {
 				$_SESSION['errorMessage'] = "Something went wrong. Try Again!";
-				reDirect('fullpost.php?id='.$postid);
+				reDirect('blogpost.php?id='.$postid);
 			}
 		}
 	}
@@ -65,7 +65,7 @@
 	<!-- NAVBAR -->
 	<nav class="navbar navbar-expand-lg sticky-top bg-light">
 		<div class="container">
-			<a class="navbar-brand" href="#"><strong>BLOGSITE</strong></a>
+			<a class="navbar-brand" href="index.php"><strong>BLOGSITE</strong></a>
 			<button class="navbar-toggler navbar-light" type="button" data-toggle="collapse" data-target="#nav-collapse">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -73,16 +73,16 @@
 			<div class="collapse navbar-collapse" id="nav-collapse">	
 				<ul class="navbar-nav ml-auto mr-auto">
 					<li class="nav-item active">
-						<a class="nav-link text-secondary" href="dashboard.php">Home<span class="sr-only">(current)</span></a>
+						<a class="nav-link text-secondary" href="#">Home<span class="sr-only">(current)</span></a>
 					</li>
 					<li class="nav-item active">
-						<a class="nav-link text-secondary" href="categories.php">Blog<span class="sr-only">(current)</span></a>
+						<a class="nav-link text-secondary" href="#">Blog<span class="sr-only">(current)</span></a>
 					</li>
 					<li class="nav-item active">
-						<a class="nav-link text-secondary" href="posts.php">Features<span class="sr-only">(current)</span></a>
+						<a class="nav-link text-secondary" href="#">Features<span class="sr-only">(current)</span></a>
 					</li>
 					<li class="nav-item active">
-						<a class="nav-link text-secondary" href="comments.php">About<span class="sr-only">(current)</span></a>
+						<a class="nav-link text-secondary" href="#">About<span class="sr-only">(current)</span></a>
 					</li>
 				</ul>
 				
@@ -116,7 +116,7 @@
 							reDirect('index.php');
 						}
 
-						$query = mysqli_query($con, "SELECT * FROM posts WHERE id='$postid'"); // ------------------------------------
+						$query = mysqli_query($con, "SELECT * FROM post WHERE id='$postid'");
 						$row = mysqli_fetch_array($query);
 					}
 						
@@ -126,7 +126,7 @@
 					<h1 class="py-1"> <?php echo htmlentities($row['title']) ?> </h1>
 					<h1 class="lead"> <?php echo htmlentities($row['subtitle']) ?> </h1>
 					<img class="py-1" class="rounded" src="uploads/<?php echo htmlentities($row['image']) ?>" width="100%">
-					<small class="text-muted">By <?php echo htmlentities($row['publisher']) ?> on <?php echo htmlentities($row['date']) ?></small>
+					<small class="text-muted">By <?php echo htmlentities($row['publisher']) ?> on <?php echo htmlentities($row['datetime']) ?></small>
 					<small class="btn btn-sm btn-light float-right">Comments: <span class="badge badge-primary">2</span></small>
 
 					<hr>
@@ -179,7 +179,7 @@
 								echo successMessage();
 							?>
 
-							<form action="fullpost.php?id=<?php echo $postid; ?>" method="POST">
+							<form action="blogpost.php?id=<?php echo $postid; ?>" method="POST">
 								<div class="form-row">
 									<div class="col-sm-6 mb-2">
 										<div class="input-group">
@@ -260,7 +260,7 @@
 				
 				<!--COPYRIGHT-->
 					<p class="text-center text-md-left">© 2020 Copyright:
-						<a href="#"><strong> Blogsite.com</strong></a>
+						<a href="index.php"><strong> Blogsite.com</strong></a>
 					</p>
 				</div>
 

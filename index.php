@@ -24,7 +24,7 @@
 	<!-- NAVBAR -->
 	<nav class="navbar navbar-expand-lg sticky-top bg-light">
 		<div class="container">
-			<a class="navbar-brand" href="#"><strong>BLOGSITE</strong></a>
+			<a class="navbar-brand" href="index.php"><strong>BLOGSITE</strong></a>
 			<button class="navbar-toggler navbar-light" type="button" data-toggle="collapse" data-target="#nav-collapse">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -32,16 +32,16 @@
 			<div class="collapse navbar-collapse" id="nav-collapse">	
 				<ul class="navbar-nav ml-auto mr-auto">
 					<li class="nav-item active">
-						<a class="nav-link text-secondary" href="dashboard.php">Home<span class="sr-only">(current)</span></a>
+						<a class="nav-link text-secondary" href="#">Home<span class="sr-only">(current)</span></a>
 					</li>
 					<li class="nav-item active">
-						<a class="nav-link text-secondary" href="categories.php">Blog<span class="sr-only">(current)</span></a>
+						<a class="nav-link text-secondary" href="#">Blog<span class="sr-only">(current)</span></a>
 					</li>
 					<li class="nav-item active">
-						<a class="nav-link text-secondary" href="posts.php">Features<span class="sr-only">(current)</span></a>
+						<a class="nav-link text-secondary" href="#">Features<span class="sr-only">(current)</span></a>
 					</li>
 					<li class="nav-item active">
-						<a class="nav-link text-secondary" href="comments.php">About<span class="sr-only">(current)</span></a>
+						<a class="nav-link text-secondary" href="#">About<span class="sr-only">(current)</span></a>
 					</li>
 				</ul>
 				
@@ -79,25 +79,25 @@
 						if ($page<1) {
 							$page = 1;
 						}
-							$blogs = ($page*6)-6;
-							$query = mysqli_query($con, "SELECT * FROM posts ORDER BY id DESC LIMIT $blogs,6"); //------------------
+							$blogs = ($page*5)-5;
+							$query = mysqli_query($con, "SELECT * FROM post ORDER BY id DESC LIMIT $blogs,5");
 					}
 
 					elseif (isset($_GET['category'])) {
 						$category = $_GET['category'];
-						$count = mysqli_num_rows(mysqli_query($con, "SELECT * FROM posts WHERE category='$category' ORDER BY id DESC")); // -----------------
+						$count = mysqli_num_rows(mysqli_query($con, "SELECT * FROM post WHERE category='$category' ORDER BY id DESC"));
 						if ($count==0) {
 							$_SESSION['errorMessage'] = "Sorry, there isn't any blogpost regarding that category";
 							reDirect('index.php');
 						}
 						else {
-							$query = mysqli_query($con, "SELECT * FROM posts WHERE category='$category' ORDER BY id DESC"); //------------------
+							$query = mysqli_query($con, "SELECT * FROM post WHERE category='$category' ORDER BY id DESC");
 						}
 					}
 
 					//DEFAULT QUERY
 			      	else {
-						$query = mysqli_query($con, "SELECT * FROM posts ORDER BY id DESC LIMIT 0, 6"); //-------------------------
+						$query = mysqli_query($con, "SELECT * FROM post ORDER BY id DESC LIMIT 0, 5");
 						$page = 1;
 					}
 						
@@ -169,8 +169,8 @@
 						?>
 
 						<?php
-						$count = mysqli_num_rows(mysqli_query($con, "SELECT * FROM posts")); //------------------
-						$paginate = ceil($count/6);
+						$count = mysqli_num_rows(mysqli_query($con, "SELECT * FROM post"));
+						$paginate = ceil($count/5);
 						for ($i=1; $i<=$paginate; $i++) { 
 							if (isset($page)) {
 								if ($i==$page) {
@@ -178,7 +178,7 @@
 						?>
 
 						<li class="page-item active">
-							<a class="page-link" href="public.php?page=<?php echo $i; ?>">
+							<a class="page-link" href="index.php?page=<?php echo $i; ?>">
 								<?php echo $i; ?>
 							</a>
 						</li>
@@ -188,7 +188,7 @@
 									else {
 						?>
 									<li class="page-item">
-										<a class="page-link" href="public.php?page=<?php echo $i; ?>">
+										<a class="page-link" href="index.php?page=<?php echo $i; ?>">
 											<?php echo $i; ?>
 										</a>
 									</li>
@@ -205,7 +205,7 @@
 								
 						?>
 						<li class="page-item">
-						<a class="page-link" href="public.php?page=<?php echo $page+1; ?>" aria-label="Next">
+						<a class="page-link" href="index.php?page=<?php echo $page+1; ?>" aria-label="Next">
 							<span aria-hidden="true">&raquo;</span>
 							<span class="sr-only">Next</span>
 						</a>
@@ -242,7 +242,7 @@
 								$query = mysqli_query($con, "SELECT * FROM category ORDER BY id DESC");
 								while($row = mysqli_fetch_assoc($query)){
 							?>
-							<a href="public.php?category=<?php echo ($row['name']); ?>" style="text-decoration: none; color:#000;"> <div class="my-1"> <?php echo ($row['name']); ?> </div> </a>
+							<a href="index.php?category=<?php echo ($row['name']); ?>" style="text-decoration: none; color:#000;"> <div class="my-1"> <?php echo ($row['name']); ?> </div> </a>
 							<?php
 								}
 							?>
@@ -256,7 +256,7 @@
 						</div>
 						<div class="card-body">
 							<?php
-								$query = mysqli_query($con, "SELECT * FROM posts ORDER BY id DESC LIMIT 0, 5"); //------------------
+								$query = mysqli_query($con, "SELECT * FROM post ORDER BY id DESC LIMIT 0, 5");
 								while($row = mysqli_fetch_assoc($query)){
 							?>
 							
@@ -327,7 +327,7 @@
 				
 				<!--COPYRIGHT-->
 					<p class="text-center text-md-left">© 2020 Copyright:
-						<a href="#"><strong> Blogsite.com</strong></a>
+						<a href="index.php"><strong> Blogsite.com</strong></a>
 					</p>
 				</div>
 
