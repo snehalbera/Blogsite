@@ -2,7 +2,7 @@
 	require '../config/config.php';
 	require '../includes/functions.php';
 	require '../includes/sessions.php';
-    // loggedIn();
+    loggedIn();
  ?>
 
 <!DOCTYPE html>
@@ -43,17 +43,17 @@
 						<a class="nav-link text-secondary" href="comments.php">Comments<span class="sr-only">(current)</span></a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link text-secondary" href="blog.php?page=1">Live Blog</a>
+						<a class="nav-link text-secondary" href="../index.php">Live Blog</a>
 					</li>
 				</ul>
 				
 				<ul class="navbar-nav">
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle text-secondary" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Profile</a>
+						<a class="nav-link dropdown-toggle text-secondary" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <?php echo $_SESSION['username']; ?> </a>
 				    	<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-							<a class="dropdown-item" href="myprofile.php">Manage Profile</a>
+							<a class="dropdown-item" href="profile.php">Manage Profile</a>
 							<a class="dropdown-item" href="admins.php">Manage Access</a>
-							<a class="dropdown-item text-danger" href="#">Logout</a>
+							<a class="dropdown-item text-danger" href="logout.php">Logout</a>
 				    	</div>
 			  		</li>
 				</ul>
@@ -83,10 +83,10 @@
 					<a href="categories.php" class="btn btn-info btn-block"> <img class="mb-1 d-icon" src="../assets/icons/add.svg"> Add New Category</a>
 				</div>
 				<div class="col-md-3 mb-2">
-					<a href="profile.php" class="btn btn-warning btn-block"> <img class="mb-1 d-icon" src="../assets/icons/add-admin.svg"> Add New Admin</a>
+					<a href="admins.php" class="btn btn-warning btn-block"> <img class="mb-1 d-icon" src="../assets/icons/add-admin.svg"> Add New Admin</a>
 				</div>
 				<div class="col-md-3 mb-2">
-					<a href="#" class="btn btn-success btn-block"> <img class="mb-1 d-icon" src="../assets/icons/checkmark.svg"> Approve Comments</a>
+					<a href="comments.php" class="btn btn-success btn-block"> <img class="mb-1 d-icon" src="../assets/icons/checkmark.svg"> Approve Comments</a>
 				</div>
 			</div>
 		</div>
@@ -125,13 +125,13 @@
 					 	</td>
 					 	<td> <?php echo $row['category'] ?> </td>
 					 	<td class="text-center"> <?php echo $row['datetime'] ?> </td>
-					 	<td class="text-center"> <?php echo $row['admin'] ?> </td>
+					 	<td class="text-center"> <?php echo $row['publisher'] ?> </td>
 					 	<td> <img src="../uploads/<?php echo $row['image'] ?>" width="100%" > </td>
 					 	<td class="text-center">
 							
 								<?php
 								$id = $row['id'];
-								$count = mysqli_num_rows(mysqli_query($con, "SELECT * FROM comment WHERE post_id='$id' AND status='ON'"));
+								$count = mysqli_num_rows(mysqli_query($con, "SELECT * FROM comments WHERE postid='$id' AND status='ON'"));
 								if ($count>0) {
 									echo '<span class="badge badge-success">'.
 									$count.
@@ -141,7 +141,7 @@
 							
 								<?php
 								$id = $row['id'];
-								$count = mysqli_num_rows(mysqli_query($con, "SELECT * FROM comment WHERE post_id='$id' AND status='OFF'"));
+								$count = mysqli_num_rows(mysqli_query($con, "SELECT * FROM comments WHERE postid='$id' AND status='OFF'"));
 								if ($count>0) {
 									echo '<span class="badge badge-danger">'.
 									$count.
@@ -153,7 +153,7 @@
 					 		<a href="editpost.php?id=<?php echo $row['id'] ?>" class="text-decoration-none"> <span class="btn-sm btn-warning">Edit</span> </a>
 					 		<a href="deletepost.php?id=<?php echo $row['id'] ?>" class="text-decoration-none"> <span class="btn-sm btn-danger">Delete</span> </a>
 					 	</td>
-					 	<td class="text-center"> <a href="fullpost.php?id=<?php echo $row['id'] ?>" target="_blank" > <span class="btn-sm btn-primary">Preview</span> </a> </td>
+					 	<td class="text-center"> <a href="../blogpost.php?id=<?php echo $row['id'] ?>" target="_blank" > <span class="btn-sm btn-primary">Preview</span> </a> </td>
 					 </tr>
 					 </tbody>
 
@@ -165,34 +165,14 @@
 				</table>
 			</div>
 		</div> 
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		</div>
+		
 	</div>
 	<!-- MAIN AREA END -->
 
     <!-- FOOTER -->
 	<footer class="page-footer bg-light mt-4">
         <div class="footer-copyright text-center py-3">© 2020 Copyright:
-          <a href="#"> Blogsite.com</a>
+          <a href="../index.php"> Blogsite.com</a>
         </div>
       </footer>
       <!-- FOOTER END -->

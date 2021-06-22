@@ -10,6 +10,12 @@ A Content Management System for blogs, that can manage posts, admins, blog categ
   </video>
 </figure>
 
+
+<figure class="video_container">
+  <iframe src="https://drive.google.com/file/d/1icmig2E00VIJsRCafrMII8-4qKB6EHve/preview" frameborder="0" allowfullscreen="true"> </iframe>
+</figure>
+
+
 ## Usage
 
 * Download this repository
