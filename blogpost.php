@@ -4,9 +4,10 @@
 	require 'includes/sessions.php';	//INCLUDES SESSION INFORMATION
  ?>
 
-  <?php
-	$postid = $_GET['id'];
+<?php
+	$postid = $_GET['id'];      //GETTING THE POSTID FROM URL
 	
+	//SUBMITTING COMMENT
 	if (isset($_POST['comnt'])) {
 		$name = $_POST['comntname'];
 		$email = $_POST['comntemail'];
@@ -33,8 +34,8 @@
 			reDirect('blogpost.php?id='.$postid);
 		}
 		else {
-			$pcomment = mysqli_query($con, "INSERT INTO comment VALUES ('', '$datetime', '$name', '$email', '$comment', 'Pending', 'OFF', '$postid')");
-			if ($pcomment) {
+			$query = mysqli_query($con, "INSERT INTO comments VALUES ('', '$datetime', '$name', '$email', '$comment', 'None', 'OFF', '$postid')");
+			if ($query) {
 				$_SESSION['successMessage'] = "Comment submitted successfully";
 			}
 			else {
@@ -107,7 +108,7 @@
 					//SEARCH FIELD
 					if (isset($_GET['searchbutton'])) {
 						$search = $_GET['search'];
-						$query = mysqli_query($con, "SELECT * FROM post WHERE title LIKE '%$search%' OR category LIKE '%$search%' OR content LIKE '%$search%'");
+						$query = mysqli_query($con, "SELECT * FROM posts WHERE title LIKE '%$search%' OR category LIKE '%$search%' OR content LIKE '%$search%'");
 					}
 					else {
 
@@ -116,7 +117,8 @@
 							reDirect('index.php');
 						}
 
-						$query = mysqli_query($con, "SELECT * FROM post WHERE id='$postid'");
+						//LOADING THE FULL POST
+						$query = mysqli_query($con, "SELECT * FROM posts WHERE id='$postid'");
 						$row = mysqli_fetch_array($query);
 					}
 						
@@ -125,13 +127,28 @@
 				<div class="card-body">
 					<h1 class="py-1"> <?php echo htmlentities($row['title']) ?> </h1>
 					<h1 class="lead"> <?php echo htmlentities($row['subtitle']) ?> </h1>
-					<img class="py-1" class="rounded" src="uploads/<?php echo htmlentities($row['image']) ?>" width="100%">
-					<small class="text-muted">By <?php echo htmlentities($row['publisher']) ?> on <?php echo htmlentities($row['datetime']) ?></small>
-					<small class="btn btn-sm btn-light float-right">Comments: <span class="badge badge-primary">2</span></small>
+					<div class="position-relative">
+							<h5 class="tag mt-3"><span class="badge badge-warning p-2"> <?php echo $row['category'] ?> </span></h5>
+							<img class="rounded mt-3" src="uploads/<?php echo $row['image']; ?>" width="100%">
+					</div>
+					<small class="text-muted"><?php echo htmlentities($row['publisher']) ?> | <?php echo htmlentities($row['datetime']) ?></small>
 
+					<div class="btn btn-sm btn-light mt-1 float-right"> Comments: 
+					<span class="badge badge-primary">
+						<?php
+							//SHOWING COUNTS ON EACH POSTS
+							$id = $row['id'];
+							$count = mysqli_num_rows(mysqli_query($con, "SELECT * FROM comments WHERE postid='$id' AND status='ON'"));
+							if ($count>0) {
+								echo '<span class="badge badge-primary">'.$count.'</span>';
+							}
+							else { echo '0'; }
+						?>
+					</span>
+					</div>
 					<hr>
 
-					<div class="full-post-content mb-4">
+					<div class="mb-4">
 						<?php echo ($row['content']); ?>
 					</div>	
 				</div>
@@ -142,11 +159,12 @@
 						<h5 class="card-header text-primary">Comments</h5>
 						<div>
 							<?php 
-								$query = mysqli_query($con, "SELECT * FROM comment WHERE post_id='$postid' AND status='ON'");
+								//APPROVED COMMENTS
+								$query = mysqli_query($con, "SELECT * FROM comments WHERE postid='$postid' AND status='ON'");
 								$count = mysqli_num_rows($query);
 								if ($count>0) {
 									$i = 0;
-									while($row = mysqli_fetch_assoc($query)){
+									while($row = mysqli_fetch_assoc($query)) {
 											
 							?>
 									
@@ -154,8 +172,8 @@
 								<div class="media">
 									<img class="align-self-start" style="max-width: 100px; margin-right:15px;" src="assets/images/default.jpg" alt="Commenter">
 									<div class="media-body">
-										<h4 class="lead mb-1"> <?php echo $row['name']; ?> </h4>
-										<p class="small"> <?php echo $row['date']; ?> </p>
+										<h4 class="lead mb-1"> <?php echo $row['commenter']; ?> </h4>
+										<p class="small"> <?php echo $row['datetime']; ?> </p>
 										<p> <?php echo $row['comment']; ?> </p>
 										<hr>
 									</div>
@@ -163,28 +181,30 @@
 							</div>
 
 							<?php
+								//END OF WHILE LOOP
 									$i++ ;
 								}
 							}
 							else {
-								echo '<h5 class="lead text-warning mt-2 mx-3 pl-1">Be the first to comment on this post</span>';
+								echo '<h5 class="lead text-warning mt-4 mx-3 pl-1">Be the first to comment on this post</span>';
 							}
 							 ?>
 						</div>
 
 						<hr>
-						<div class="card-body mx-4">
+						<div class="card-body mx-sm-4">
 							<?php 
 								echo errorMessage();
 								echo successMessage();
 							?>
 
+							<!-- COMMENT SECTION -->
 							<form action="blogpost.php?id=<?php echo $postid; ?>" method="POST">
 								<div class="form-row">
 									<div class="col-sm-6 mb-2">
 										<div class="input-group">
 											<div class="input-group-prepend">
-												<span class="input-group-text"><img src="assets/icons/username.svg" style="max-width: 100%; max-height: 18px;"></span>
+												<span class="input-group-text"><img class="c-icon" src="assets/icons/username.svg"></span>
 											</div>
 											<input type="text" name="comntname" class="form-control" placeholder="Name">
 										</div>
@@ -193,7 +213,7 @@
 									<div class="col-sm-6 mb-2">
 										<div class="input-group">
 											<div class="input-group-prepend">
-												<span class="input-group-text"><img src="assets/icons/mail.svg" style="max-width: 100%; max-height: 18px;"></span>
+												<span class="input-group-text"><img class="c-icon" src="assets/icons/mail.svg"></span>
 											</div>
 											<input type="email" name="comntemail" class="form-control" placeholder="Email">
 										</div>
