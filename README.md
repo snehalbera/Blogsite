@@ -5,7 +5,7 @@ A Content Management System for blogs, that can manage posts, admins, blog categ
 ## Demo
 
 <figure class="video_container">
-  <video controls="true" allowfullscreen="true" poster="./Snapshots/t1.mp4">
+  <video controls="true" allowfullscreen="true" poster="./Snapshots/login.png">
     <source src="./Snapshots/t1.mp4" type="video/mp4">
   </video>
 </figure>

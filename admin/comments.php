@@ -2,7 +2,8 @@
 	require '../config/config.php';
 	require '../includes/functions.php';
 	require '../includes/sessions.php';
-    // loggedIn();
+	$_SESSION['URL'] = $_SERVER['PHP_SELF'];
+    loggedIn();
  ?>
 
 <!DOCTYPE html>
@@ -43,17 +44,17 @@
 						<a class="nav-link text-secondary" href="comments.php">Comments<span class="sr-only">(current)</span></a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link text-secondary" href="blog.php?page=1">Live Blog</a>
+						<a class="nav-link text-secondary" href="../index.php">Live Blog</a>
 					</li>
 				</ul>
 				
 				<ul class="navbar-nav">
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle text-secondary" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Profile</a>
+						<a class="nav-link dropdown-toggle text-secondary" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <?php echo $_SESSION['username']; ?> </a>
 				    	<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-							<a class="dropdown-item" href="myprofile.php">Manage Profile</a>
+							<a class="dropdown-item" href="profile.php">Manage Profile</a>
 							<a class="dropdown-item" href="admins.php">Manage Access</a>
-							<a class="dropdown-item text-danger" href="#">Logout</a>
+							<a class="dropdown-item text-danger" href="logout.php">Logout</a>
 				    	</div>
 			  		</li>
 				</ul>
@@ -91,14 +92,14 @@
 							<th class="text-center" width="5%">NO.</th>
 							<th class="text-center" width="12%">DATE</th>
 							<th class="text-center" width="17%">COMMENTER</th>
-							<th>COMMENT</th>
+							<th class="text-center">COMMENT</th>
 							<th class="text-center" width="15%">ACTION</th>
 							<th class="text-center" width="13%">LIVE PREVIEW</th>
 						</tr>
 						</thead>
 
 						<?php 
-							$query = mysqli_query($con, "SELECT * FROM comment WHERE status='OFF' ORDER BY id DESC");
+							$query = mysqli_query($con, "SELECT * FROM comments WHERE status='OFF' ORDER BY id DESC");
 							$i = 0;
 							$no = 1;
 							while($row = mysqli_fetch_assoc($query)){
@@ -108,14 +109,14 @@
 						<tbody>
 						<tr>
 							<th scope="row" class="text-center"> <?php echo $no ?> </th>
-							<td class="text-center"> <?php echo $row['date'] ?> </td>
-							<td class="text-center"> <?php echo $row['name'] ?> </td>
+							<td class="text-center"> <?php echo $row['datetime'] ?> </td>
+							<td class="text-center"> <?php echo $row['commenter'] ?> </td>
 							<td> <?php echo $row['comment'] ?> </td>
 							<td class="text-center">
-								<a href="approve-comment.php?id=<?php echo $row['id'] ?>" class="text-decoration-none"> <span class="btn-sm btn-success">Approve</span> </a>
-								<a href="delete-comment.php?id=<?php echo $row['id'] ?>" class="text-decoration-none"> <span class="btn-sm btn-danger">Delete</span> </a>
+								<a href="comment-approve.php?id=<?php echo $row['id'] ?>" class="text-decoration-none"> <span class="btn-sm btn-success">Approve</span> </a>
+								<a href="comment-delete.php?id=<?php echo $row['id'] ?>" class="text-decoration-none"> <span class="btn-sm btn-danger">Delete</span> </a>
 							</td>
-							<td class="text-center"> <a href="fullpost.php?id=<?php echo $row['post_id'] ?>" target="_blank" > <span class="btn-sm btn-primary">Preview</span> </a> </td>
+							<td class="text-center"> <a href="../blogpost.php?id=<?php echo $row['postid'] ?>" target="_blank" > <span class="btn-sm btn-primary">Preview</span> </a> </td>
 						</tr>
 						</tbody>
 
@@ -148,7 +149,7 @@
 						</thead>
 
 						<?php 
-							$query = mysqli_query($con, "SELECT * FROM comment WHERE status='ON' ORDER BY id DESC");
+							$query = mysqli_query($con, "SELECT * FROM comments WHERE status='ON' ORDER BY id DESC");
 							$i = 0;
 							$no = 1;
 							while($row = mysqli_fetch_assoc($query)){
@@ -158,14 +159,14 @@
 						<tbody>
 						<tr>
 							<th scope="row" class="text-center"> <?php echo $no ?> </th>
-							<td class="text-center"> <?php echo $row['date'] ?> </td>
-							<td class="text-center"> <?php echo $row['name'] ?> </td>
+							<td class="text-center"> <?php echo $row['datetime'] ?> </td>
+							<td class="text-center"> <?php echo $row['commenter'] ?> </td>
 							<td> <?php echo $row['comment'] ?> </td>
 							<td class="text-center">
-								<a href="disapprove-comment.php?id=<?php echo $row['id'] ?>" class="text-decoration-none"> <span class="btn-sm btn-warning">Reprove</span> </a>
-								<a href="delete-comment.php?id=<?php echo $row['id'] ?>" class="text-decoration-none"> <span class="btn-sm btn-danger">Delete</span> </a>
+								<a href="comment-disapprove.php?id=<?php echo $row['id'] ?>" class="text-decoration-none"> <span class="btn-sm btn-warning">Reprove</span> </a>
+								<a href="comment-delete.php?id=<?php echo $row['id'] ?>" class="text-decoration-none"> <span class="btn-sm btn-danger">Delete</span> </a>
 							</td>
-							<td class="text-center"> <a href="fullpost.php?id=<?php echo $row['post_id'] ?>" target="_blank" > <span class="btn-sm btn-primary">Preview</span> </a> </td>
+							<td class="text-center"> <a href="../blogpost.php?id=<?php echo $row['postid'] ?>" target="_blank" > <span class="btn-sm btn-primary">Preview</span> </a> </td>
 						</tr>
 						</tbody>
 
@@ -185,7 +186,7 @@
 	<!-- FOOTER -->
 	<footer class="page-footer bg-light mt-4">
         <div class="footer-copyright text-center py-3">© 2020 Copyright:
-          <a href="#"> Blogsite.com</a>
+          <a href="../index.php"> Blogsite.com</a>
         </div>
     </footer>
     <!-- FOOTER END -->
