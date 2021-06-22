@@ -2,13 +2,12 @@
 	require '../config/config.php';
 	require '../includes/functions.php';
 	require '../includes/sessions.php';
-	// $_SESSION['URL'] = $_SERVER['PHP_SELF'];
-	// loggedIn();
+	$_SESSION['URL'] = $_SERVER['PHP_SELF'];
+	loggedIn();
  ?>
 
 <?php
-	// $username = $_SESSION['username'];
-    $username = "snehalbera";
+	$username = $_SESSION['username'];
 	$query = mysqli_query($con, "SELECT * FROM admins WHERE username='$username'");
 	$data = mysqli_fetch_array($query);
 
@@ -18,10 +17,10 @@
 		$headline = $_POST['aheadline'];
 		$bio = $_POST['abio'];
 		$image = $_FILES['aimage']['name'];
-		$upload = "assets/images/admins/".basename($_FILES['aimage']['name']);
+		$upload = "../assets/images/admins/".basename($_FILES['aimage']['name']);
 
-		if (strlen($headline)>20) {
-			$_SESSION['errorMessage'] = "Headline should be less than 20 characters";
+		if (strlen($headline)>30) {
+			$_SESSION['errorMessage'] = "Headline should be less than 30 characters";
 			reDirect('profile.php');
 		}
 		elseif (strlen($bio)>500) {
@@ -29,7 +28,7 @@
 			reDirect('profile.php');
 		}
 		else {
-			if (!isset($_FILES['aimage']['name'])) {
+			if (isset($_FILES['aimage']['name'])) {
 				$query = mysqli_query($con, "UPDATE admins SET name='$name', headline='$headline', image='$image', bio='$bio' WHERE username='$username'");
 				move_uploaded_file($_FILES['aimage']['tmp_name'], $upload);
 			}
@@ -44,19 +43,6 @@
 					reDirect('profile.php');
 				}
 			}
-
-
-
-			// $query = mysqli_query($con, "UPDATE INTO post VALUES ('', '$datetime', '$title', '$subtitle', '$category', '$publisher', '$image', '$content')");
-			// move_uploaded_file($_FILES['pimage']['tmp_name'], $upload);
-			
-			// if ($query) {
-			// 	$_SESSION['successMessage'] = "Post added successfully";
-			// }
-			// else {
-			// 	$_SESSION['errorMessage'] = "Something went wrong. Try Again!";
-			// 	reDirect('posts.php');
-			// }
 		}
 	}
  ?>
@@ -99,17 +85,17 @@
 						<a class="nav-link text-secondary" href="comments.php">Comments<span class="sr-only">(current)</span></a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link text-secondary" href="blog.php?page=1">Live Blog</a>
+						<a class="nav-link text-secondary" href="../index.php">Live Blog</a>
 					</li>
 				</ul>
 				
 				<ul class="navbar-nav">
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle text-secondary" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Profile</a>
+						<a class="nav-link dropdown-toggle text-secondary" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <?php echo $_SESSION['username']; ?> </a>
 				    	<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-							<a class="dropdown-item" href="myprofile.php">Manage Profile</a>
+							<a class="dropdown-item" href="profile.php">Manage Profile</a>
 							<a class="dropdown-item" href="admins.php">Manage Access</a>
-							<a class="dropdown-item text-danger" href="#">Logout</a>
+							<a class="dropdown-item text-danger" href="logout.php">Logout</a>
 				    	</div>
 			  		</li>
 				</ul>
@@ -134,11 +120,13 @@
             <div class="col-md-4 mt-4">
                 <div class="card">
 					<div class="card-header bg-primary text-center py-2" style="color: #fff;"><h4><?php echo $data['name'];?></h4></div>
-					<div class="card-body mx-sm-5">
-						<img src="../assets/images/<?php echo $data['images'];?>" class="rounded mx-auto d-block img-fluid mb-3" width="80%">
-						<div class="bio">
+					<div class="card-body">
+						<img src="../assets/images/<?php echo $data['image'];?>" class="rounded mx-auto d-block mb-3" width="70%">
+						<div class="text-secondary text-center">
+							<?php echo $data['headline'];?>
+						</div> <hr>
+						<div class="text-justify">
 							<?php echo $data['bio'];?>
-							
 						</div>
 					</div>
 					
@@ -176,7 +164,7 @@
                             <!-- BUTTONS -->
                             <div class="row mt-4">
                                 <div class="col pr-2">
-                                    <button type="submit" class="btn float-right btn-primary action-button btn-min-wt">Dashboard</button>
+									<a href="dashboard.php"> <button type="submit" class="btn float-right btn-primary action-button btn-min-wt">Dashboard</button> </a>
                                 </div>
                                 <div class="col pl-2">
                                     <button type="submit" class="btn float-left btn-warning action-button btn-min-wt" name="aupdate">Update</button>
@@ -195,7 +183,7 @@
 	<!-- FOOTER -->
 	<footer class="page-footer bg-light mt-4">
         <div class="footer-copyright text-center py-3">© 2020 Copyright:
-          <a href="#"> Blogsite.com</a>
+          <a href="../index.php"> Blogsite.com</a>
         </div>
     </footer>
     <!-- FOOTER END -->
