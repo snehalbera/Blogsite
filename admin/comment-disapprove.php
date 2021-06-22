@@ -5,8 +5,8 @@
    
     if (isset($_GET['id'])) {
         $cid = $_GET['id'];
-        $publisher = $_SESSION['name'];
-        $query = mysqli_query($con, "UPDATE comment SET status='OFF', approvedby='$publisher' WHERE id='$cid'");
+        $publisher = $_SESSION['username'];
+        $query = mysqli_query($con, "UPDATE comments SET status='OFF', approvedby='$publisher' WHERE id='$cid'");
         if ($query) {
             $_SESSION['successMessage'] = "Comment Disapproved";
             reDirect('comments.php');
