@@ -2,11 +2,12 @@
 	require '../config/config.php';
 	require '../includes/functions.php';
 	require '../includes/sessions.php';
+	loggedIn();
  ?>
 
  <?php
  	$id = $_GET['id'];
-	$query = mysqli_query($con, "SELECT * FROM posts WHERE id='$id'"); // --------
+	$query = mysqli_query($con, "SELECT * FROM posts WHERE id='$id'");
 	$row = mysqli_fetch_array($query);
 
 	$ftitle = $row['title'];
@@ -17,10 +18,10 @@
 
 <?php
 	if (isset($_POST['pdelete'])) {
-		$query = mysqli_query($con, "DELETE FROM posts WHERE id='$id'"); // ---------
+		$query = mysqli_query($con, "DELETE FROM posts WHERE id='$id'");
 
 		if ($query) {
-			$uploaded_image_delete = 'uploads/{$fimage}';
+			$uploaded_image_delete = '../uploads/{$fimage}';
 			unlink($uploaded_image_delete);
 			$_SESSION['successMessage'] = "Post deleted successfully";
 		}
@@ -69,17 +70,17 @@
 						<a class="nav-link text-secondary" href="comments.php">Comments<span class="sr-only">(current)</span></a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link text-secondary" href="blog.php?page=1">Live Blog</a>
+						<a class="nav-link text-secondary" href="../index.php">Live Blog</a>
 					</li>
 				</ul>
 				
 				<ul class="navbar-nav">
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle text-secondary" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Profile</a>
+						<a class="nav-link dropdown-toggle text-secondary" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <?php echo $_SESSION['username']; ?> </a>
 				    	<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-							<a class="dropdown-item" href="myprofile.php">Manage Profile</a>
+							<a class="dropdown-item" href="profile.php">Manage Profile</a>
 							<a class="dropdown-item" href="admins.php">Manage Access</a>
-							<a class="dropdown-item text-danger" href="#">Logout</a>
+							<a class="dropdown-item text-danger" href="logout.php">Logout</a>
 				    	</div>
 			  		</li>
 				</ul>
@@ -110,7 +111,7 @@
 		  		<div class="card-header h4 text-primary">Delete Post</div>
 		  		<div class="card-body mx-sm-5">
 		    		
-		    		<form action="delete.php?id=<?php echo $id; ?>" method="POST">
+		    		<form action="deletepost.php?id=<?php echo $id; ?>" method="POST">
 					  	<h5 class="card-title h5">Post Name</h5>
 					    <input disabled="y" type="text" class="form-control" placeholder="Post Title" value="<?php echo $ftitle; ?>">
 					    <h5 class="card-title h5 mt-4">Sub Heading</h5>
@@ -145,7 +146,7 @@
 					    <!-- BUTTONS -->
 					    <div class="row mt-4">
 					    	<div class="col pr-2">
-					    		<button type="submit" class="btn float-right btn-primary action-button btn-min-wt">Dashboard</button>
+								<a href="dashboard.php"> <button type="submit" class="btn float-right btn-primary action-button btn-min-wt">Dashboard</button> </a>
 					    	</div>
 					    	<div class="col pl-2">
 					    		<button type="submit" class="btn float-left btn-danger action-button btn-min-wt" name="pdelete">Delete</button>
@@ -162,7 +163,7 @@
     <!-- FOOTER -->
 	<footer class="page-footer bg-light mt-4">
         <div class="footer-copyright text-center py-3">© 2020 Copyright:
-          <a href="#"> Blogsite.com</a>
+          <a href="../index.php"> Blogsite.com</a>
         </div>
     </footer>
     <!-- FOOTER END -->

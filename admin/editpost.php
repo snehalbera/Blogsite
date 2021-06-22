@@ -2,11 +2,11 @@
 	require '../config/config.php';
 	require '../includes/functions.php';
 	require '../includes/sessions.php';
+	loggedIn();
  ?>
 
 <?php
-	// $publisher = $_SESSION['name'];
-    $publisher = "snehalbera";
+	$publisher = $_SESSION['username'];
     $id = $_GET['id'];
 
 	if (isset($_POST['pupdate'])) {
@@ -14,7 +14,7 @@
 		$subtitle = $_POST['psubtitle'];
 		$image = $_FILES['pimage']['name'];
 		$category = $_POST['scategory'];
-		$upload = "uploads/".basename($_FILES['pimage']['name']);
+		$upload = "../uploads/".basename($_FILES['pimage']['name']);
 		$content = $_POST['pdescription'];
 
 		// DATE
@@ -33,12 +33,12 @@
 			reDirect('editpost.php?id=$id');
 		}
 		else {
-			if (!isset($_FILES['pimage']['name'])) {
-				$query = mysqli_query($con, "UPDATE post SET title='$title', subtitle='$subtitle', category='$category', image='$image', content='$content' WHERE id='$id'");
+			if (isset($_FILES['pimage']['name'])) {
+				$query = mysqli_query($con, "UPDATE posts SET title='$title', subtitle='$subtitle', category='$category', image='$image', content='$content' WHERE id='$id'");
 				move_uploaded_file($_FILES['pimage']['tmp_name'], $upload);
 			}
 			else {
-				$query = mysqli_query($con, "UPDATE post SET title='$title', subtitle='$subtitle', category='$category', content='$content' WHERE id='$id'");
+				$query = mysqli_query($con, "UPDATE posts SET title='$title', subtitle='$subtitle', category='$category', content='$content' WHERE id='$id'");
 				
 				if ($query) {
 					$_SESSION['successMessage'] = "Post updated successfully";
@@ -90,17 +90,17 @@
 						<a class="nav-link text-secondary" href="comments.php">Comments<span class="sr-only">(current)</span></a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link text-secondary" href="blog.php?page=1">Live Blog</a>
+						<a class="nav-link text-secondary" href="../index.php">Live Blog</a>
 					</li>
 				</ul>
 				
 				<ul class="navbar-nav">
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle text-secondary" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Profile</a>
+						<a class="nav-link dropdown-toggle text-secondary" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <?php echo $_SESSION['username']; ?> </a>
 				    	<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-							<a class="dropdown-item" href="myprofile.php">Manage Profile</a>
+							<a class="dropdown-item" href="profile.php">Manage Profile</a>
 							<a class="dropdown-item" href="admins.php">Manage Access</a>
-							<a class="dropdown-item text-danger" href="#">Logout</a>
+							<a class="dropdown-item text-danger" href="logout.php">Logout</a>
 				    	</div>
 			  		</li>
 				</ul>
@@ -128,7 +128,7 @@
 			?>
 
 			<?php
-				$query = mysqli_query($con, "SELECT * FROM posts WHERE id='$id'"); //----------
+				$query = mysqli_query($con, "SELECT * FROM posts WHERE id='$id'");
 				$row = mysqli_fetch_array($query);
 
 				$ftitle = $row['title'];
@@ -142,7 +142,7 @@
 		  		<div class="card-header h4 text-primary">Edit Post</div>
 		  		<div class="card-body mx-sm-5">
 		    		
-		    		<form action="edit.php?id=<?php echo $id; ?>" method="POST" enctype="multipart/form-data">
+		    		<form action="editpost.php?id=<?php echo $id; ?>" method="POST" enctype="multipart/form-data">
 					  	<h5 class="card-title h5">Post Name</h5>
 					    <input type="text" class="form-control" name="ptitle" placeholder="Post Title" value="<?php echo $ftitle; ?>">
 					    <h5 class="card-title h5 mt-4">Sub Heading</h5>
@@ -167,7 +167,7 @@
 							        <option selected><?php echo $fcategory; ?></option>
 							    	
 							    	<?php 
-								    	$query = mysqli_query($con, "SELECT name FROM category");
+								    	$query = mysqli_query($con, "SELECT name FROM categories");
 								    	$i = 0;
 								    	while($row = mysqli_fetch_assoc($query)){
 								    		echo '<option>'. $row['name'] .'</option>';
@@ -188,7 +188,7 @@
 					    <!-- BUTTONS -->
 					    <div class="row mt-4">
 					    	<div class="col pr-2">
-					    		<button type="submit" class="btn float-right btn-primary action-button btn-min-wt">Dashboard</button>
+							<a href="dashboard.php"> <button type="submit" class="btn float-right btn-primary action-button btn-min-wt">Dashboard</button> </a>
 					    	</div>
 					    	<div class="col pl-2">
 					    		<button type="submit" class="btn float-left btn-success action-button btn-min-wt" name="pupdate">Update</button>
@@ -205,7 +205,7 @@
     <!-- FOOTER -->
 	<footer class="page-footer bg-light mt-4">
         <div class="footer-copyright text-center py-3">© 2020 Copyright:
-          <a href="#"> Blogsite.com</a>
+          <a href="../index.php"> Blogsite.com</a>
         </div>
     </footer>
     <!-- FOOTER END -->

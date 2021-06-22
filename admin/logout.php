@@ -7,5 +7,5 @@
     $_SESSION['username'] = NULL;
     session_destroy();
     reDirect('../login.php');
-    
+
  ?>

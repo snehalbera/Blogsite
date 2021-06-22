@@ -2,12 +2,12 @@
 	require '../config/config.php';
 	require '../includes/functions.php';
 	require '../includes/sessions.php';
+	$_SESSION['URL'] = $_SERVER['PHP_SELF'];
+	loggedIn();
  ?>
 
 <?php
-    // ----------------------------------------------------------------------
-	// $publisher = $_SESSION['name'];
-    $publisher = "snehalbera";
+	$publisher = $_SESSION['username'];
 
 	if (isset($_POST['csubmit'])) {
 		$category = $_POST['cname'];
@@ -23,14 +23,12 @@
 			$_SESSION['errorMessage'] = "Category Name should be greater than 3 characters";
 			reDirect('categories.php');
 		}
-        // ---------------------------------------------------------------------------- varchar 24 global
-		elseif (strlen($category)>24) {
+		elseif (strlen($category)>30) {
 			$_SESSION['errorMessage'] = "Category Name should be less than 30 characters";
 			reDirect('categories.php');
 		}
 		else {
-            // ------------------------------------------------------------
-			$publish = mysqli_query($con, "INSERT INTO category VALUES ('', '$category', '$publisher', '$datetime')");
+			$publish = mysqli_query($con, "INSERT INTO categories VALUES ('', '$category', '$publisher', '$datetime')");
 			if ($publish) {
 				$_SESSION['successMessage'] = "Category added successfully";
 			}
@@ -80,17 +78,17 @@
 						<a class="nav-link text-secondary" href="comments.php">Comments<span class="sr-only">(current)</span></a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link text-secondary" href="blog.php?page=1">Live Blog</a>
+						<a class="nav-link text-secondary" href="../index.php">Live Blog</a>
 					</li>
 				</ul>
 				
 				<ul class="navbar-nav">
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle text-secondary" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Profile</a>
+						<a class="nav-link dropdown-toggle text-secondary" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <?php echo $_SESSION['username']; ?> </a>
 				    	<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-							<a class="dropdown-item" href="myprofile.php">Manage Profile</a>
+							<a class="dropdown-item" href="profile.php">Manage Profile</a>
 							<a class="dropdown-item" href="admins.php">Manage Access</a>
-							<a class="dropdown-item text-danger" href="#">Logout</a>
+							<a class="dropdown-item text-danger" href="logout.php">Logout</a>
 				    	</div>
 			  		</li>
 				</ul>
@@ -128,7 +126,7 @@
 						<!-- BUTTONS -->
 					    <div class="row mt-4">
 					    	<div class="col pr-2">
-					    		<a href="dashboard.php"><button type="submit" class="btn float-right btn-primary action-button btn-min-wt">Dashboard</button></a>
+					    		<a href="dashboard.php"> <button type="submit" class="btn float-right btn-primary action-button btn-min-wt">Dashboard</button> </a>
 					    	</div>
 					    	<div class="col pl-2">
 					    		<button type="submit" class="btn float-left btn-warning action-button btn-min-wt" name="csubmit">Publish</button>
@@ -145,7 +143,7 @@
     <!-- FOOTER -->
 	<footer class="page-footer fixed-bottom bg-light">
         <div class="footer-copyright text-center py-3">© 2020 Copyright:
-          <a href="#"> Blogsite.com</a>
+          <a href="../index.php"> Blogsite.com</a>
         </div>
     </footer>
     <!-- FOOTER END -->
