@@ -19,9 +19,8 @@
 		}
 		else {
 			$_SESSION['errorMessage'] = "Login Required!";
-			reDirect('login.php');
+			reDirect('../login.php');
 		}
 	}
-
 
  ?>

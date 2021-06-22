@@ -18,7 +18,8 @@
 			reDirect('login.php');
         }
         else {
-            $query = mysqli_query($con, "SELECT * FROM admins WHERE username='$username' AND password='$pass'");
+            $enc_pass = md5($pass);
+            $query = mysqli_query($con, "SELECT * FROM admins WHERE username='$username' AND password='$enc_pass'");
             $count = mysqli_num_rows($query);
             if ($count==1) {
                 $row = mysqli_fetch_array($query);
