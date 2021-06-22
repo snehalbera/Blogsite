@@ -1,6 +1,6 @@
 .tag {
 	position: absolute;
-	top:20px;
+	top:15px;
 	left:15px;
 }
 
@@ -15,4 +15,9 @@
 
 .btn-min-wt {
 	min-width: 104px;
+}
+
+.c-icon {
+	max-width: 100%;
+	max-height: 18px;
 }

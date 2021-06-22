@@ -8,3 +8,4 @@ A Content Management System for blogs, that can manage posts, admins, blog categ
 * Create a new database with a name **blogsite**
 * Import **blogsite.sql** into the database
 * For Admin controls, username: **admin** & password: **admin123** 
+* Enjoy 😊✌
