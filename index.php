@@ -70,7 +70,7 @@
                     //SEARCH FIELD
                     if (isset($_GET['searchbutton'])) {
       				    $search = $_GET['search'];
-      				    $query = mysqli_query($con, "SELECT * FROM post WHERE title LIKE '%$search%' OR category LIKE '%$search%' OR content LIKE '%$search%'");
+      				    $query = mysqli_query($con, "SELECT * FROM posts WHERE title LIKE '%$search%' OR category LIKE '%$search%' OR content LIKE '%$search%'");
                     }
                     
                     //PAGE NUMBERING IN URL
@@ -79,25 +79,25 @@
 						if ($page<1) {
 							$page = 1;
 						}
-							$blogs = ($page*5)-5;
-							$query = mysqli_query($con, "SELECT * FROM post ORDER BY id DESC LIMIT $blogs,5");
+							$blogs = ($page*4)-4;
+							$query = mysqli_query($con, "SELECT * FROM posts ORDER BY id DESC LIMIT $blogs,4");
 					}
 
 					elseif (isset($_GET['category'])) {
 						$category = $_GET['category'];
-						$count = mysqli_num_rows(mysqli_query($con, "SELECT * FROM post WHERE category='$category' ORDER BY id DESC"));
+						$count = mysqli_num_rows(mysqli_query($con, "SELECT * FROM posts WHERE category='$category' ORDER BY id DESC"));
 						if ($count==0) {
 							$_SESSION['errorMessage'] = "Sorry, there isn't any blogpost regarding that category";
 							reDirect('index.php');
 						}
 						else {
-							$query = mysqli_query($con, "SELECT * FROM post WHERE category='$category' ORDER BY id DESC");
+							$query = mysqli_query($con, "SELECT * FROM posts WHERE category='$category' ORDER BY id DESC");
 						}
 					}
 
 					//DEFAULT QUERY
 			      	else {
-						$query = mysqli_query($con, "SELECT * FROM post ORDER BY id DESC LIMIT 0, 5");
+						$query = mysqli_query($con, "SELECT * FROM posts ORDER BY id DESC LIMIT 0, 4");
 						$page = 1;
 					}
 						
@@ -114,12 +114,12 @@
 							<img class="rounded mt-1" src="uploads/<?php echo $row['image']; ?>" width="100%">
 						</div>
 						<small class="text-muted">By <?php echo $row['publisher']; ?> on <?php echo $row['datetime']; ?></small>
-						<small class="float-right">Comments: 
+						<small class="float-right mt-1">Comments: 
 						<?php
 
 							//SHOWING COUNTS ON EACH POSTS
                             $id = $row['id'];
-                            $count = mysqli_num_rows(mysqli_query($con, "SELECT * FROM comment WHERE post_id='$id' AND status='ON'"));
+                            $count = mysqli_num_rows(mysqli_query($con, "SELECT * FROM comments WHERE postid='$id' AND status='ON'"));
                             if ($count>0) {
                                 echo '<span class="badge badge-primary">'.$count.'</span>';
                             }
@@ -169,7 +169,7 @@
 						?>
 
 						<?php
-						$count = mysqli_num_rows(mysqli_query($con, "SELECT * FROM post"));
+						$count = mysqli_num_rows(mysqli_query($con, "SELECT * FROM posts"));
 						$paginate = ceil($count/5);
 						for ($i=1; $i<=$paginate; $i++) { 
 							if (isset($page)) {
@@ -227,8 +227,23 @@
             		<!-- POPULAR POSTS -->
 					<h4 class="mt-3">Popular Posts</h4>
 					<div class="card my-3">
-						<div class="card-body">
-							Popular Posts
+						<div class="card-body pb-0">
+							<?php
+								$query = mysqli_query($con, "SELECT * FROM posts WHERE id IN (SELECT postid FROM comments GROUP BY postid ORDER BY COUNT(comment) DESC) ORDER BY id LIMIT 0, 6");
+								while($row = mysqli_fetch_assoc($query)){
+							?>
+							
+							<div>
+								<a href="blogpost.php?id=<?php echo $row['id']?>" style="text-decoration: none;">
+									<img class="rounded" src="uploads/<?php echo $row['image']; ?>" width="100%">
+										<div class="text-secondary mt-2"> <?php echo $row['title']; ?></div>
+								</a>
+							</div>
+							<hr>
+
+							<?php
+								}
+							?>
 						</div>
 					</div>
 
@@ -239,7 +254,7 @@
 						</div>
 						<div class="card-body">
 							<?php
-								$query = mysqli_query($con, "SELECT * FROM category ORDER BY id DESC");
+								$query = mysqli_query($con, "SELECT * FROM categories ORDER BY id DESC");
 								while($row = mysqli_fetch_assoc($query)){
 							?>
 							<a href="index.php?category=<?php echo ($row['name']); ?>" style="text-decoration: none; color:#000;"> <div class="my-1"> <?php echo ($row['name']); ?> </div> </a>
@@ -254,15 +269,15 @@
 						<div class="card-header">
 							<h5 class="text-primary">Recent Posts</h5>
 						</div>
-						<div class="card-body">
+						<div class="card-body pb-0">
 							<?php
-								$query = mysqli_query($con, "SELECT * FROM post ORDER BY id DESC LIMIT 0, 5");
+								$query = mysqli_query($con, "SELECT * FROM posts ORDER BY id DESC LIMIT 0, 6");
 								while($row = mysqli_fetch_assoc($query)){
 							?>
 							
 							<div class="media">
-									<img src="uploads/<?php echo $row['image']; ?>" class="d-block img-fluid align-self-start" width="100">
-									<a href="fullpost.php?id=<?php echo $row['id']?>" style="text-decoration: none;">
+									<img src="uploads/<?php echo $row['image']; ?>" class="rounded d-block img-fluid align-self-start" width="100">
+									<a href="blogpost.php?id=<?php echo $row['id']?>" style="text-decoration: none;">
 									<div class="media-body ml-3">
 										<div class="text-secondary"> <?php echo $row['title']; ?></div>
 									</div>
