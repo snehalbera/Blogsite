@@ -2,19 +2,11 @@
 
 A Content Management System for blogs, that can manage posts, admins, blog categories, admin-approved comments, and other features using Bootstrap, PHP and MySQL.
 
-## Demo
+## Preview
 
-<figure class="video_container">
-  <video controls="true" allowfullscreen="true" poster="./Snapshots/login.png">
-    <source src="./Snapshots/t1.mp4" type="video/mp4">
-  </video>
-</figure>
+![Preview](./Snapshots/preview.gif)
 
-
-<figure class="video_container">
-  <iframe src="https://drive.google.com/file/d/1icmig2E00VIJsRCafrMII8-4qKB6EHve/preview" frameborder="0" allowfullscreen="true"> </iframe>
-</figure>
-
+Full Demo Link [here](https://drive.google.com/file/d/1gj0WdtJy9TP8p2eySSebPhEn-cIJ56pb/view?usp=sharing)
 
 ## Usage
 
