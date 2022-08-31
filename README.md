@@ -6,7 +6,7 @@ A Content Management System for blogs, that can manage posts, admins, blog categ
 
 ![Preview](./Snapshots/preview.gif)
 
-Full Demo Link [here](https://drive.google.com/file/d/1gj0WdtJy9TP8p2eySSebPhEn-cIJ56pb/view)
+Full Demo Link [here](https://drive.google.com/file/d/1a1QeYmjBo3p3sVXeVJN3Hz5mv-Vzsi-L/view)
 
 ## Usage
 
